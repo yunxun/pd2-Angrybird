@@ -9,6 +9,7 @@
 #include <QTransform>
 #include <QtMath>
 #include "GameItem/gamelistener.h"
+#include <QMediaPlayer>
 
 class GameItem : public QObject
 {
@@ -20,6 +21,7 @@ public:
     GameItem(float);
     ~GameItem();
     static void initGameItem(QSizeF,QSizeF,b2World*,QGraphicsScene*,QTimer*,QTimer*,QList<GameItem*>*,int);
+
 
 public slots:
     void paint();

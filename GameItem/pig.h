@@ -11,6 +11,7 @@ public:
     Pig(float,b2Vec2);
     virtual ~Pig();
 
+
 private:
     float prize=5000.0;
 };

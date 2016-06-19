@@ -82,6 +82,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
         }
         else if(dragBox.contains(mouseEvent->pos()) && nextRound<0)
         {
+            Bird_Bouncing_Sound->play();
             drag = true;
             start = mouseEvent->pos();//QCursor::pos();
             dx=0;//
@@ -149,7 +150,10 @@ void MainWindow::initGame()
     catapult->setPos(origin.x()-catapult->pixmap().width()/2,origin.y()-25);
     scene->addItem(catapult);
 
-    itemList.push_back(new Land(0,b2Vec2(WORLD_W*0.5,0),QSizeF(WORLD_W,WORLD_H*0.25),true));
+    for(float k = 0.025; k<=1 ; k+=0.025)
+    {
+        itemList.push_back(new Land(0,b2Vec2(WORLD_W*0.5,0),QSizeF(WORLD_W,WORLD_H*0.25),true));
+    }
 
     for(float i=0.5; i<=0.81; i+=0.1)
     {
@@ -161,11 +165,11 @@ void MainWindow::initGame()
             itemList.push_back(new Obstacle(b2Vec2(WORLD_W*(i+0.04),WORLD_H*j),QSizeF(2.5,11)));
         }
     }
-    itemList.push_back(new Pig(0.07,b2Vec2(WORLD_W*0.4,WORLD_H*0.2)));
-    itemList.push_back(new Obstacle(b2Vec2(WORLD_W*0.4,WORLD_H*(0.2+0.07)),QSizeF(17, 2)));
+    itemList.push_back(new Pig(0.07,b2Vec2(WORLD_W*0.4,WORLD_H*(0.5+0.02))));
+    itemList.push_back(new Obstacle(b2Vec2(WORLD_W*0.4,WORLD_H*(0.3+0.02)),QSizeF(17, 2)));
+    itemList.push_back(new Obstacle(b2Vec2(WORLD_W*0.4,WORLD_H*(0.2)),QSizeF(2.5, 11)));
 
 
-    pig_yell_sound->play();
     connect(timer,SIGNAL(timeout()),this,SLOT(nextFrame()));
     connect(timer,SIGNAL(timeout()),this,SLOT(clearWasted()));
     connect(timer_check,SIGNAL(timeout()),this,SLOT(checkStable()));
@@ -214,6 +218,7 @@ void MainWindow::clearWasted()
     {
         if(itemList[i]->wasted)
         {
+
             delete itemList[i];
             itemList.erase(itemList.begin()+i);
             --i;
@@ -234,6 +239,8 @@ void MainWindow::checkStable()
     }
     if(--nextRound<0)
     {
+        //music
+        Bird_Bouncing_Sound->play();
         GameItem::invulnerability=false;
         disconnect(timer_check,SIGNAL(timeout()),this,SLOT(checkStable()));
         connect(timer_check,SIGNAL(timeout()),this,SLOT(checkStatus()));
@@ -246,11 +253,13 @@ void MainWindow::checkStatus()
     if(GameItem::birdCount==0)
     {
         gameEnded=true;
+        Wood_destroy_sound->play();
         ui->label_Result->setText("TRY AGAIN");
     }
     if(GameItem::pigCount==0)
     {
         gameEnded=true;
+        pig_delete_SOUND->play();
         ui->label_Result->setText("YOU WIN!");
         GameItem::score+=5000*GameItem::birdCount;
         disconnect(timer_check,SIGNAL(timeout()),this,SLOT(checkStatus()));

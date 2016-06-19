@@ -13,12 +13,13 @@ Pig::Pig(float size_ratio, b2Vec2 pos): GameItem(size_ratio)
     g_pixmap.setPixmap(QPixmap(":/image/Laughing_pig.gif").scaled(g_scene->height()*ratio,g_scene->height()*ratio));
     g_pixmap.setTransformOriginPoint(g_pixmap.boundingRect().width()/2,g_pixmap.boundingRect().height()/2);
 
-  /*  QLabel *label = new QLabel();
+    QLabel *label = new QLabel();
     QMovie *movie = new QMovie(":/image/Laughing_pig.gif");
     label->setMovie(movie);
+    label->setGeometry(0,0,0,0);
     movie->start();
-    label->show();
-*/
+
+
 
     // Create Body
     b2BodyDef bodydef;

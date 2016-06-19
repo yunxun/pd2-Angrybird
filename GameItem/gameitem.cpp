@@ -4,6 +4,7 @@
 GameItem::GameItem(float size_ratio): ratio(size_ratio)
 {
     stamina = maxStamina;
+
 }
 
 GameItem::~GameItem()
